@@ -1,10 +1,25 @@
 // src/pages/StudentForm.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const StudentForm = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        // Fetch subjects
+        const subjectsResponse = await axios.get('http://localhost:3000/response/subjects');
+        const fetchedSubjects = Array.isArray(subjectsResponse.data) ? subjectsResponse.data : [];
+        setSubjects(fetchedSubjects);
 
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
   // Define the initial state
   const initialState = {
     name: '',
@@ -19,6 +34,7 @@ const StudentForm = () => {
 
   // Use localStorage data as initial state if available
   const [formData, setFormData] = useState(initialState);
+  const [subjects, setSubjects] = useState([]); // Available subjects
 
   // Load form data from localStorage on component mount
   useEffect(() => {
@@ -132,14 +148,26 @@ const StudentForm = () => {
         </select>
 
         {/* Subject Input */}
-        <label className="block mb-2 font-semibold">Subject</label>
-        <input
-          type="text"
-          name="subject"
-          value={formData.subject}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        />
+          <label htmlFor="subject-select" className="block mb-2 font-semibold">
+             Subject
+          </label>
+          <select
+            type="text"
+            name="subject"
+            // value={formData.subject}
+            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
+            disabled={subjects.length === 0}
+            required
+          >
+            <option value="">
+              {subjects.length === 0 ? 'Loading subjects...' : 'Select a Subject'}
+            </option>
+            {subjects.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject.toUpperCase()}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button

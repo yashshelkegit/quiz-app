@@ -1,35 +1,37 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const { QuizResponse } = require("../models/response-model");
-// const { Quiz } = require("../models/quiz-model");
+const { Quiz } = require("../models/quiz-model");
 
 module.exports.submitQuiz = async (req, res) => {
-    try{
-        const response = await new QuizResponse(req.body);
-        const ack = await response.save();
-        console.log(ack)
-        res.json(ack)
-    } catch (e){
-        res.json({error: true})
-    }
-}
+	try {
+		const response = await new QuizResponse(req.body);
+		const ack = await response.save();
+		console.log(ack);
+		res.json(ack);
+	} catch (e) {
+		res.json({ error: true });
+	}
+};
 
 module.exports.getResponse = async (req, res) => {
-  try {
-    const { subject } = req.query;
-    const query = subject ? { subject: subject.toUpperCase() } : {};
-    
-    const responses = await QuizResponse.find(query).sort({ totalScore: -1 });
-    
-    res.json(responses);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching quiz responses', error: error.message });
-  }
-}
+	try {
+		const { subject } = req.query;
+		const query = subject ? { subject: subject.toLowerCase() } : {};
+
+		const responses = await QuizResponse.find(query).sort({ totalScore: -1 });
+
+		res.json(responses);
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: "Error fetching quiz responses", error: error.message });
+	}
+};
 
 module.exports.getSubject = async (req, res) => {
 	try {
-		const subjects = await QuizResponse.distinct("subject");
+		const subjects = await Quiz.distinct("subject");
 		res.json(subjects || []); // Ensure an array is always sent
 	} catch (error) {
 		res
@@ -40,7 +42,7 @@ module.exports.getSubject = async (req, res) => {
 
 module.exports.sendResults = async (req, res) => {
 	const { subject, responses } = req.body;
-    console.log("object")
+	console.log("object");
 	// Configure nodemailer transporter
 	let transporter = nodemailer.createTransport({
 		service: "gmail", // Or your email service

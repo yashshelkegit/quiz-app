@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     setError(null);
 
     try {
-      const response = await axios.get(`http://localhost:3000/response/responses?subject=${subject}`);
+      const response = await axios.get(`http://localhost:3000/response/responses?subject=${subject.toUpperCase()}`);
       setResponses(response.data);
     } catch (error) {
       console.error('Error fetching responses:', error);
@@ -49,15 +49,12 @@ const AdminDashboard = () => {
     }
   };
 
-  // Helper function to check if a quiz is expired
   const isQuizExpired = (quiz) => {
-    // Assuming quiz duration is in minutes and createdAt is the start time
     const quizEndTime = new Date(quiz.createdAt);
     quizEndTime.setMinutes(quizEndTime.getMinutes() + quiz.duration);
     return quizEndTime < new Date();
   };
 
-  // Existing methods (handlePrintTable, handleSendEmails) remain the same...
   const handlePrintTable = () => {
     const printWindow = window.open('', '', 'height=500, width=800');
     
@@ -224,7 +221,7 @@ const AdminDashboard = () => {
             </option>
             {subjects.map((subject) => (
               <option key={subject} value={subject}>
-                {subject}
+                {subject.toUpperCase()}
               </option>
             ))}
           </select>

@@ -28,9 +28,9 @@ const QuizList = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h2 className="text-2xl font-bold mb-6">iMSE</h2>
-      <ul className="w-full max-w-md space-y-4">
+    <div className="min-h-screen border p-5 bg-gray-100">
+      <h2 className="text-2xl font-bold mb-6">Integrated Mid-Sem Examination</h2>
+      <ul className="w-full border grid sm:grid-cols-3 grid-cols-1 items-center justify-center gap-5">
         {quizzes.map((quiz) => (
           <li key={quiz.id} className="bg-white p-4 rounded-lg shadow-lg">
             <Link to={`/quiz/${quiz.id}`} className="text-blue-600 hover:underline">
@@ -38,7 +38,8 @@ const QuizList = () => {
             </Link>
             <div className="mt-2 text-sm text-gray-600">
               <p>Duration: {quiz.duration} minutes</p>
-              <Link to={`/quiz/${quiz.id}`} className="text-blue-500 hover:underline">
+              <p>Subject: {quiz.subject? quiz.subject.toUpperCase(): "N/A"} </p>
+              <Link to={`/quiz/${quiz.id}`} className="underline text-blue-500 hover:underline">
                 Access Quiz
               </Link>
             </div>
