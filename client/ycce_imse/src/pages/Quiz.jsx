@@ -110,28 +110,47 @@ const Quiz = () => {
   };
 
   const handleSubmit = async () => {
-    const finalScore = calculateScore();
-    setScore(finalScore);
-    setIsSubmitted(true);
+  const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+  const finalScore = calculateScore();
+  setScore(finalScore);
+  setIsSubmitted(true);
 
-    const submissionData = {
-      studentData: JSON.parse(localStorage.getItem('studentData') || '{}'),
-      quizId: id,
-      answers,
-      violations,
-      score: finalScore,
-      timeSpent: quiz.duration * 60 - timeLeft,
-      submittedAt: new Date()
-    };
-
-    try {
-      await axios.post('http://localhost:3000/submissions', submissionData);
-      console.log('Quiz submitted successfully');
-    } catch (error) {
-      console.error('Error submitting quiz:', error);
-      alert('Failed to submit quiz. Please contact support.');
-    }
+  const submissionData = {
+    id: id, // Quiz ID
+    quizId: quiz.quizId || null, // Assuming quiz might have a separate quizId
+    studentData: {
+      id: studentData.id || null,
+      name: studentData.name,
+      email: studentData.email,
+      branch: studentData.branch,
+      section: studentData.section,
+      rollNo: studentData.rollNo,
+      regNo: studentData.regNo,
+      academicYear: studentData.academicYear,
+    },
+    quizMongoId: quiz._id || null,
+    violations: violations,
+    studentId: studentData.id || null,
+    subject: studentData.subject || "",
+    studentEmail: studentData.email,
+    answers: quiz.questions.map(question => ({
+      queId: question.id,
+      selectedAnswer: answers[question.id] || null,
+      isCorrect: answers[question.id] === question.answer
+    })),
+    totalScore: finalScore.points,
+    startTime: new Date(Date.now() - (quiz.duration * 60 * 1000)), // Calculate start time
+    endTime: new Date() // Current time
   };
+
+  try {
+    const response = await axios.post('http://localhost:3000/response/submit', submissionData);
+    console.log('Quiz submitted successfully', response.data);
+  } catch (error) {
+    console.error('Error submitting quiz:', error);
+    alert('Failed to submit quiz. Please contact support.');
+  }
+};
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

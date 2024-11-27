@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const adminRoutes = require(path.join(__dirname, "/routes/admin-routes.js"));
 const quizRoutes = require(path.join(__dirname, "/routes/quiz-routes.js"));
+const responseRoutes = require(path.join(__dirname, "/routes/response-routes.js"));
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,7 @@ mongoose
 	.connect("mongodb://localhost:27017/yashdb")
 	.then(console.log("db connected"));
 
+app.use("/response", responseRoutes);
 app.use("/admin/quiz", adminRoutes);
 app.use("/quiz", quizRoutes);
 

@@ -12,6 +12,7 @@ module.exports.createQuiz = async (req, res) => {
 			duration,
 			startTime,
 			endTime,
+			instructor,
 		} = req.body;
 
 		const quizData = req.files.quizFile;
@@ -25,6 +26,7 @@ module.exports.createQuiz = async (req, res) => {
 		const quiz = new Quiz({
 			id,
 			title,
+			subject,
 			questions: questionsData.questions.map((q, index) => ({
 				id: index + 1,
 				text: q.text,
@@ -37,7 +39,6 @@ module.exports.createQuiz = async (req, res) => {
 			shareableLink,
 			active: true,
 			createdAt: new Date(),
-			subject,
 			branch,
 			academicYear,
 			startTime,

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { AiOutlineCheckCircle, AiOutlineWarning } from "react-icons/ai";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 const QuizUploadForm = () => {
 	const [formData, setFormData] = useState({
@@ -129,6 +130,7 @@ const QuizUploadForm = () => {
 	return (
 		<div className="min-h-screen grid items-center">
 			<div className="mx-auto p-5 w-full max-w-3xl bg-white rounded-lg shadow-lg">
+				<Link to={"/admin-dashboard"} className="block  text-blue-600 my-5 underline">Go to Admin Panel</Link>
 			<h1 className="text-2xl font-bold mb-6">Create New Quiz</h1>
 
 			<form onSubmit={handleSubmit} className="space-y-6">
@@ -163,6 +165,8 @@ const QuizUploadForm = () => {
 							placeholder="Enter subject"
 						/>
 					</div>
+
+					
 
 					<div>
 						<label className="block text-sm font-medium mb-1" htmlFor="branch">

@@ -7,6 +7,7 @@ import StudentForm from './pages/StudentForm';
 import QuizList from './pages/QuizList';
 import ProtectedRoute from './components/ProtectedRoute';
 import Quiz from './pages/Quiz';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         />
         {/* <Route path="/quiz/:id" element={<QuizInterface />} /> */}
         <Route path="/admin" element={<QuizUploadForm />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/quiz/:id" element={<Quiz/>} />
       </Routes>
     </Router>

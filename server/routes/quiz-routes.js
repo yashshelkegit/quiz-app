@@ -10,5 +10,6 @@ const quizController = require(path.join(
 
 router.get("/quizzes", quizController.getQuizzes);
 router.get("/:id", quizController.getQuiz);
+router.delete('/:id', quizController.deleteQuiz);
 
 module.exports = router;

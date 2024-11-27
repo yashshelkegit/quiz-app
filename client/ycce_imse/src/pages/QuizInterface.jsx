@@ -65,9 +65,46 @@ const QuizInterface = () => {
     }
   };
 
-  const handleQuizSubmit = async () => {
-    // Implementation for quiz submission
-  };
+  const handleQuizSubmit = async (e) => {
+  e.preventDefault();
+    console.log("object")
+  // Retrieve student data from localStorage
+  const studentData = JSON.parse(localStorage.getItem('studentData'));
+
+  // Collect selected answers
+  const answers = quiz.questions.map(question => {
+    const selectedOption = document.querySelector(`input[name="question_${question.id}"]:checked`);
+    return {
+      queId: question.id,
+      selectedAnswer: selectedOption ? selectedOption.value : null
+    };
+  });
+
+  try {
+    const response = await axios.post('http://localhost:3000/submit', {
+      quizId: id,
+      studentInfo: {
+        name: studentData.name,
+        email: studentData.email,
+        rollNumber: studentData.rollNo,
+        branch: studentData.branch,
+        semester: studentData.section
+      },
+      answers: answers,
+      startTime: new Date(Date.now() - (timeLeft * 1000)), // Calculate start time
+      endTime: new Date() // Current time
+    });
+
+    if (response.data.success) {
+      // Show result modal or navigate to results page
+      alert(`Quiz submitted! Your score: ${response.data.totalScore}/${response.data.maxScore}`);
+      // Optionally navigate to results page
+      // history.push(`/quiz-result/${id}`);
+    }
+  } catch (err) {
+    setError(err.response?.data?.message || 'Failed to submit quiz');
+  }
+};
 
   if (loading) {
     return <div className="text-center py-10">Loading...</div>;
